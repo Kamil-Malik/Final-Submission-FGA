@@ -100,8 +100,6 @@ func Login(ctx *gin.Context) {
 		}
 	}
 
-	user.Password = helper.HashPass(user.Password)
-
 	localUser, err := service.GetUserByEmail(user.Email)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, dto.GenericResponseDTO{
@@ -111,17 +109,16 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	validationResult := helper.ComparePassword(user.Password, localUser.Password)
+	validationError := helper.ComparePassword(user.Password, localUser.Password)
 	token := helper.GenerateToken(localUser.ID, localUser.Email)
-	if validationResult {
-		ctx.JSON(http.StatusOK, gin.H{
-			"token": token,
-		})
-	} else {
+	if validationError != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, dto.GenericResponseDTO{
 			Code:    http.StatusUnauthorized,
 			Message: "Email/Password is invalid",
 		})
-		return
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{
+			"token": token,
+		})
 	}
 }

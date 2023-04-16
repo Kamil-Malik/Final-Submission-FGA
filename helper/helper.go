@@ -17,10 +17,10 @@ func HashPass(pass string) string {
 	return string(hashedPassword)
 }
 
-func ComparePassword(loginPassword, localPassword string) bool {
+func ComparePassword(loginPassword, localPassword string) error {
 	login, local := []byte(loginPassword), []byte(localPassword)
-	err := bcrypt.CompareHashAndPassword(login, local)
-	return err == nil
+	err := bcrypt.CompareHashAndPassword(local, login)
+	return err
 }
 
 func GetContentType(ctx *gin.Context) string {
