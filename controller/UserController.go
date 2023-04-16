@@ -2,6 +2,9 @@ package controller
 
 import (
 	"Proyek-Akhir-Golang/dto"
+	"Proyek-Akhir-Golang/helper"
+	"Proyek-Akhir-Golang/mapper"
+	"Proyek-Akhir-Golang/service"
 	"net/http"
 
 	valid "github.com/asaskevich/govalidator"
@@ -11,6 +14,7 @@ import (
 func Register(ctx *gin.Context) {
 
 	var user dto.UserDTO
+	var contentType string
 
 	if err := ctx.BindJSON(&user); err != nil {
 		ctx.AbortWithStatusJSON(
@@ -41,8 +45,22 @@ func Register(ctx *gin.Context) {
 			})
 		return
 	}
+
+	user.Password = helper.HashPass(user.Password)
+	if err := service.InsertUser(mapper.DtoToEntity(user)); err != nil {
+		ctx.AbortWithStatusJSON(
+			http.StatusBadRequest,
+			dto.GenericResponseDTO{
+				Code:    http.StatusBadRequest,
+				Message: err.Error(),
+ct.JSN(
+	http.StusCreated,
+		to.GeneicResponseTO{
+		Code:    http.StatsCrated,
+			Message "OK",
+		})
 }
 
-func Login(ctx *gin.Context) {
+uc Login(ctx *ginContext) {
 
-}
+

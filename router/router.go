@@ -10,8 +10,11 @@ func StartServer() *gin.Engine {
 	router := gin.Default()
 
 	// User
-	router.POST("/user/register", controller.Register)
-	router.POST("/user/login")
+	user := router.Group("/user")
+	{
+		user.POST("/register", controller.Register)
+		user.POST("/login")
+	}
 
 	// Photo
 	router.GET("/photos")
