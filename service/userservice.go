@@ -12,3 +12,12 @@ func InsertUser(user entity.UserEntity) error {
 
 	return err
 }
+
+func GetUserByEmail(email string) (entity.UserEntity, error) {
+	var user entity.UserEntity
+
+	db := db.GetDB()
+	err := db.Where("email = ?", email).First(&user).Error
+
+	return user, err
+}

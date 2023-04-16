@@ -1,7 +1,7 @@
 package router
 
 import (
-	"Proyek-Akhir-Golang/controller"
+	"Proyek-Akhir-Golang/control"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,8 +12,8 @@ func StartServer() *gin.Engine {
 	// User
 	user := router.Group("/user")
 	{
-		user.POST("/register", controller.Register)
-		user.POST("/login")
+		user.POST("/register", control.Register)
+		user.POST("/login", control.Login)
 	}
 
 	// Photo
