@@ -18,22 +18,20 @@ func CreateSocialMedia(ctx *gin.Context) {
 	contentType := helper.GetContentType(ctx)
 	if contentType == "application/json" {
 		if err := ctx.ShouldBindJSON(&socialMediaDTO); err != nil {
-			ctx.AbortWithStatusJSON(
+			helper.AbortGenericResponse(
+				ctx,
 				http.StatusBadRequest,
-				dto.GenericResponseDTO{
-					Code:    http.StatusBadRequest,
-					Message: "Please provide a valid data",
-				})
+				"Please provide a valid data",
+			)
 			return
 		}
 	} else {
 		if err := ctx.ShouldBind(&socialMediaDTO); err != nil {
-			ctx.AbortWithStatusJSON(
+			helper.AbortGenericResponse(
+				ctx,
 				http.StatusBadRequest,
-				dto.GenericResponseDTO{
-					Code:    http.StatusBadRequest,
-					Message: "Please provide a valid data",
-				})
+				"Please provide a valid data",
+			)
 			return
 		}
 	}
@@ -42,27 +40,24 @@ func CreateSocialMedia(ctx *gin.Context) {
 	socialMediaDTO.UserID = uint(userData["id"].(float64))
 
 	if _, err := valid.ValidateStruct(socialMediaDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, dto.GenericResponseDTO{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
+		helper.AbortGenericResponse(
+			ctx,
+			http.StatusBadRequest,
+			err.Error(),
+		)
 		return
 	}
 
 	if err := service.InsertSocialMedia(mapper.SocialMediaDTOToEntity(socialMediaDTO)); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, dto.GenericResponseDTO{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
+		helper.AbortGenericResponse(
+			ctx,
+			http.StatusBadRequest,
+			err.Error(),
+		)
 		return
 	}
 
-	ctx.JSON(
-		http.StatusCreated,
-		dto.GenericResponseDTO{
-			Code:    http.StatusCreated,
-			Message: "OK",
-		})
+	helper.SendGenericResponse(ctx)
 }
 
 func GetAllSocialMedia(ctx *gin.Context) {
@@ -72,51 +67,34 @@ func GetAllSocialMedia(ctx *gin.Context) {
 		socialMediasDTO = append(socialMediasDTO, mapper.SocialMediaEntityToDto(entity))
 	}
 
-	ctx.JSON(
-		http.StatusOK,
-		gin.H{
-			"status": dto.GenericResponseDTO{
-				Code:    http.StatusOK,
-				Message: "OK",
-			},
-			"data": socialMediasDTO,
-		},
-	)
+	helper.SendGenericResponseWithData(ctx, socialMediasDTO)
 }
 
 func GetSocialMediaByID(ctx *gin.Context) {
 	id := ctx.Param("id")
 	socialMediaID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		ctx.AbortWithStatusJSON(
+		helper.AbortGenericResponse(
+			ctx,
 			http.StatusBadRequest,
-			dto.GenericResponseDTO{
-				Code:    http.StatusNotFound,
-				Message: "Please provide a valid ID",
-			})
+			"Please provide a valid ID",
+		)
 		return
 	}
 
 	socialMediaEntity, err := service.GetSocialMediaByID(uint(socialMediaID))
 	if err != nil {
-		ctx.AbortWithStatusJSON(
+		helper.AbortGenericResponse(
+			ctx,
 			http.StatusBadRequest,
-			dto.GenericResponseDTO{
-				Code:    http.StatusNotFound,
-				Message: "Social Media not found",
-			})
+			"Social Media not found",
+		)
 		return
 	}
 
-	ctx.JSON(
-		http.StatusOK,
-		gin.H{
-			"status": dto.GenericResponseDTO{
-				Code:    http.StatusOK,
-				Message: "OK",
-			},
-			"data": mapper.SocialMediaEntityToDto(socialMediaEntity),
-		},
+	helper.SendGenericResponseWithData(
+		ctx,
+		mapper.SocialMediaEntityToDto(socialMediaEntity),
 	)
 }
 
@@ -124,12 +102,11 @@ func UpdateSocialMediaByID(ctx *gin.Context) {
 	id := ctx.Param("id")
 	socialMediaID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		ctx.AbortWithStatusJSON(
+		helper.AbortGenericResponse(
+			ctx,
 			http.StatusBadRequest,
-			dto.GenericResponseDTO{
-				Code:    http.StatusNotFound,
-				Message: "Please provide a valid ID",
-			})
+			"Please provide a valid ID",
+		)
 		return
 	}
 
@@ -137,22 +114,20 @@ func UpdateSocialMediaByID(ctx *gin.Context) {
 	contentType := helper.GetContentType(ctx)
 	if contentType == "application/json" {
 		if err := ctx.ShouldBindJSON(&socialMediaDTO); err != nil {
-			ctx.AbortWithStatusJSON(
+			helper.AbortGenericResponse(
+				ctx,
 				http.StatusBadRequest,
-				dto.GenericResponseDTO{
-					Code:    http.StatusBadRequest,
-					Message: "Please provide a valid data",
-				})
+				"Please provide a valid data",
+			)
 			return
 		}
 	} else {
 		if err := ctx.ShouldBind(&socialMediaDTO); err != nil {
-			ctx.AbortWithStatusJSON(
+			helper.AbortGenericResponse(
+				ctx,
 				http.StatusBadRequest,
-				dto.GenericResponseDTO{
-					Code:    http.StatusBadRequest,
-					Message: "Please provide a valid data",
-				})
+				"Please provide a valid data",
+			)
 			return
 		}
 	}
@@ -162,56 +137,46 @@ func UpdateSocialMediaByID(ctx *gin.Context) {
 	socialMediaDTO.ID = uint(socialMediaID)
 
 	if _, err := valid.ValidateStruct(socialMediaDTO); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, dto.GenericResponseDTO{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
+		helper.AbortGenericResponse(
+			ctx,
+			http.StatusBadRequest,
+			err.Error(),
+		)
 		return
 	}
 
 	if err := service.UpdateSocialMedia(mapper.SocialMediaDTOToEntity(socialMediaDTO)); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, dto.GenericResponseDTO{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
+		helper.AbortGenericResponse(
+			ctx,
+			http.StatusBadRequest,
+			err.Error(),
+		)
 		return
 	}
 
-	ctx.JSON(
-		http.StatusOK,
-		dto.GenericResponseDTO{
-			Code:    http.StatusOK,
-			Message: "OK",
-		})
+	helper.SendGenericResponse(ctx)
 }
 
 func DeleteSocialMediaByID(ctx *gin.Context) {
 	id := ctx.Param("id")
 	socialMediaID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		ctx.AbortWithStatusJSON(
+		helper.AbortGenericResponse(
+			ctx,
 			http.StatusBadRequest,
-			dto.GenericResponseDTO{
-				Code:    http.StatusBadRequest,
-				Message: "Please provide a valid ID",
-			})
+			"Please provide a valid ID",
+		)
 		return
 	}
 
 	if err := service.DeletePhotoByID(uint(socialMediaID)); err != nil {
-		ctx.AbortWithStatusJSON(
+		helper.AbortGenericResponse(
+			ctx,
 			http.StatusBadRequest,
-			dto.GenericResponseDTO{
-				Code:    http.StatusNotFound,
-				Message: "Photo not found",
-			})
+			"Social media not found",
+		)
 		return
 	}
 
-	ctx.JSON(
-		http.StatusCreated,
-		dto.GenericResponseDTO{
-			Code:    http.StatusCreated,
-			Message: "OK",
-		})
+	helper.SendGenericResponse(ctx)
 }
