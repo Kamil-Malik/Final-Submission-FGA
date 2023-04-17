@@ -8,7 +8,7 @@ import (
 
 func GetAllPhoto() (photo []entity.PhotoEntity) {
 	db := db.GetDB()
-	db.Find(&photo)
+	db.Find(&photo).Order("id asc")
 	return photo
 }
 

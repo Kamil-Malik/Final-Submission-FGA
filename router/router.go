@@ -29,11 +29,15 @@ func StartServer() *gin.Engine {
 	}
 
 	// Comment
-	router.GET("/comments")
-	router.GET("/comment/:id")
-	router.POST("/comment")
-	router.PUT("/comment")
-	router.DELETE("/comment")
+	comment := router.Group("/comment")
+	{
+		comment.Use(middleware.Authentication())
+		comment.GET("/", control.GetAllComments)
+		comment.GET("/:id", control.GetCommentByID)
+		comment.POST("/", control.CreateComment)
+		comment.PUT("/:id", control.UpdateCommentByID)
+		comment.DELETE("/:id", control.DeleteCommentByID)
+	}
 
 	// Social Media
 	router.GET("/sosmed")
