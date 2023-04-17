@@ -40,11 +40,15 @@ func StartServer() *gin.Engine {
 	}
 
 	// Social Media
-	router.GET("/sosmed")
-	router.GET("/sosmed/:id")
-	router.POST("/sosmed")
-	router.PUT("/sosmed")
-	router.DELETE("/sosmed")
+	socialMedia := router.Group("/social")
+	{
+		socialMedia.Use(middleware.Authentication())
+		socialMedia.GET("/", control.GetAllSocialMedia)
+		socialMedia.GET("/:id", control.GetSocialMediaByID)
+		socialMedia.POST("/", control.CreateSocialMedia)
+		socialMedia.PUT("/:id", control.UpdateSocialMediaByID)
+		socialMedia.DELETE("/:id", control.DeleteSocialMediaByID)
+	}
 
 	// Change Port
 	router.Run(":8080")
