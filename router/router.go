@@ -24,8 +24,8 @@ func StartServer() *gin.Engine {
 		photo.GET("/", control.GetAllPhoto)
 		photo.GET("/:id", control.GetPhotoByID)
 		photo.POST("/", control.CreatePhoto)
-		photo.PUT("/")
-		photo.DELETE("/photo")
+		photo.PUT("/:id", control.UpdatePhotoByID)
+		photo.DELETE("/:id", control.DeletePhotoByID)
 	}
 
 	// Comment

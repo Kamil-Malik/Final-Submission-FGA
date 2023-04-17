@@ -15,6 +15,7 @@ func PhotoEntityToDTO(entity entity.PhotoEntity) (dto dto.PhotoDTO) {
 }
 
 func PhotoDTOToEntity(dto dto.PhotoDTO) (entity entity.PhotoEntity) {
+	entity.ID = dto.ID
 	entity.Title = dto.Title
 	entity.Caption = dto.Caption
 	entity.PhotoURL = dto.PhotoURL
