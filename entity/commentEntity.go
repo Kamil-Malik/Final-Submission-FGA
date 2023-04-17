@@ -4,8 +4,9 @@ import "time"
 
 type CommentEntity struct {
 	ID        uint        `gorm:"primaryKey;autoIncrement"`
-	UserID    string      `gorm:"not null;index;associationForeignKey:ID"`
-	PhotoID   string      `gorm:"not null;index;associationForeignKey:ID"`
+	UserID    string      `gorm:"not null;index;column:user_id;associationForeignKey:ID"`
+	User      UserEntity  `gorm:"foreignKey:UserID"`
+	PhotoID   string      `gorm:"not null;index;column:photo_id;associationForeignKey:ID"`
 	Photo     PhotoEntity `gorm:"foreignKey:PhotoID"`
 	Message   string      `gorm:"not null"`
 	CreatedAt time.Time

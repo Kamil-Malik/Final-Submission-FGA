@@ -2,6 +2,7 @@ package router
 
 import (
 	"Proyek-Akhir-Golang/control"
+	"Proyek-Akhir-Golang/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,11 +18,15 @@ func StartServer() *gin.Engine {
 	}
 
 	// Photo
-	router.GET("/photos")
-	router.GET("/photo/:id")
-	router.POST("/photo")
-	router.PUT("/photo")
-	router.DELETE("/photo")
+	photo := router.Group("/photo")
+	{
+		photo.Use(middleware.Authentication())
+		photo.GET("/", control.GetAllPhoto)
+		photo.GET("/:id", control.GetPhotoByID)
+		photo.POST("/", control.CreatePhoto)
+		photo.PUT("/")
+		photo.DELETE("/photo")
+	}
 
 	// Comment
 	router.GET("/comments")

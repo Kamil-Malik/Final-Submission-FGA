@@ -5,13 +5,12 @@ import (
 	"Proyek-Akhir-Golang/entity"
 )
 
-func DtoToEntity(dto dto.UserDTO) entity.UserEntity {
-	var user entity.UserEntity
+func DtoToEntity(dto dto.UserDTO) (entity entity.UserEntity) {
 
-	user.Username = dto.Username
-	user.Email = dto.Email
-	user.Password = dto.Password
-	user.Age = dto.Age
+	entity.Username = dto.Username
+	entity.Email = dto.Email
+	entity.Password = dto.Password
+	entity.Age = dto.Age
 
-	return user
+	return entity
 }

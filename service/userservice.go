@@ -5,19 +5,14 @@ import (
 	"Proyek-Akhir-Golang/entity"
 )
 
-func InsertUser(user entity.UserEntity) error {
-
+func InsertUser(user entity.UserEntity) (err error) {
 	db := db.GetDB()
-	err := db.Create(&user).Error
-
+	err = db.Create(&user).Error
 	return err
 }
 
-func GetUserByEmail(email string) (entity.UserEntity, error) {
-	var user entity.UserEntity
-
+func GetUserByEmail(email string) (user entity.UserEntity, err error) {
 	db := db.GetDB()
-	err := db.Where("email = ?", email).First(&user).Error
-
+	err = db.Where("email = ?", email).First(&user).Error
 	return user, err
 }
