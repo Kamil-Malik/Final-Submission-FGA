@@ -11,6 +11,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register User
+// @Summary Register A User Account
+// @Schemes
+// @Description Register A User Account
+// @Tags user
+// @Accept json
+// @Accept application/x-www-form-urlencoded
+// @Produce json
+// @Success 200 {object} dto.GenericResponseDTO
+// @Failure 400 {object} dto.GenericResponseDTO
+// @Router /user/register [post]
 func Register(ctx *gin.Context) {
 	var user dto.UserDTO
 	contentType := helper.GetContentType(ctx)
@@ -65,6 +76,18 @@ func Register(ctx *gin.Context) {
 	helper.SendGenericResponse(ctx)
 }
 
+// Login User
+// @Summary Login User
+// @Schemes
+// @Description Login with existing user account
+// @Tags user
+// @Accept json
+// @Accept application/x-www-form-urlencoded
+// @Produce json
+// @Success 200 {string} token
+// @Failure 400 {object} dto.GenericResponseDTO
+// @Failure 401 {object} dto.GenericResponseDTO
+// @Router /user/login [post]
 func Login(ctx *gin.Context) {
 	var user dto.UserDTO
 	contentType := helper.GetContentType(ctx)
