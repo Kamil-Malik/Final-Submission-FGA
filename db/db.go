@@ -25,3 +25,7 @@ func StartDB() {
 		entity.PhotoEntity{},
 		entity.CommentEntity{})
 }
+
+func GetDB() *gorm.DB {
+	return db
+}

@@ -1,6 +1,8 @@
 package entity
 
-import "time"
+import (
+	"time"
+)
 
 type UserEntity struct {
 	ID           uint                `gorm:"primaryKey;autoIncrement"`
